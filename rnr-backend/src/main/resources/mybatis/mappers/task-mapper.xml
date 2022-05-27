@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hansol.rnr.mapper.TaskMapper">
+    <insert id="insertTask" parameterType="com.hansol.rnr.entity.Task"
+            useGeneratedKeys="true"
+            keyProperty="taskId">
+        INSERT INTO task(prj_code, emp_id, type)
+        VALUES (#{prjCode}, #{empId}, #{type})
+    </insert>
+
+    <select id="selectTaskByTaskId" parameterType="int" resultType="com.hansol.rnr.entity.Task">
+        SELECT *
+        FROM task
+        WHERE task_id = #{taskId}
+    </select>
+
+    <select id="selectTasksByTaskId"
+            parameterType="int"
+            resultType="map">
+        SELECT t.task_id     AS taskId,
+               t.prj_code    AS prjCode,
+               p.prj_name    AS prjName,
+               tp.com_name    AS comName,
+               e.emp_name    AS empName,
+               e.position    AS position,
+               t.type        AS type,
+               e.emp_contact AS empContact
+        FROM task AS t
+                 INNER JOIN task_company tp ON t.task_id = tp.task_id
+                 LEFT JOIN employee e ON t.emp_id = e.emp_id
+                 LEFT JOIN project p ON p.prj_code = t.prj_code
+        WHERE t.task_id = #{taskId}
+
+    </select>
+
+    <select id="selectTasksByPrjCode"
+            parameterType="string"
+            resultType="map">
+        SELECT t.task_id     AS taskId,
+               t.prj_code    AS prjCode,
+               p.prj_name    AS prjName,
+               tp.com_name    AS comName,
+               e.emp_name    AS empName,
+               e.position    AS position,
+               t.type        AS type,
+               e.emp_contact AS empContact
+        FROM task AS t
+                 INNER JOIN task_company tp ON t.task_id = tp.task_id
+                 LEFT JOIN employee e ON t.emp_id = e.emp_id
+                 LEFT JOIN project p ON p.prj_code = t.prj_code
+        WHERE t.prj_code = #{prjCode}
+    </select>
+
+    <select id="selectAllTask"
+            resultType="map">
+        SELECT t.task_id     AS taskId,
+               t.prj_code    AS prjCode,
+               p.prj_name    AS prjName,
+               tp.com_name    AS comName,
+               e.emp_name    AS empName,
+               e.position    AS position,
+               t.type        AS type,
+               e.emp_contact AS empContact
+        FROM task AS t
+                 LEFT JOIN project p ON p.prj_code = t.prj_code
+                 LEFT JOIN employee e ON t.emp_id = e.emp_id
+                 LEFT JOIN task_company tp ON t.task_id = tp.task_id
+    </select>
+
+    <update id="updateTask" parameterType="com.hansol.rnr.entity.Task">
+        UPDATE task
+        SET prj_code = #{prjCode},
+            emp_id = #{empId},
+            type = #{type}
+        WHERE task_id = #{taskId}
+        LIMIT 1
+    </update>
+
+    <delete id="deleteTask" parameterType="int">
+        DELETE FROM task
+        WHERE task_id = #{taskId}
+    </delete>
+
+    <resultMap id="Task" type="com.hansol.rnr.entity.Task">
+        <id property="taskId" column="task_id"/>
+        <result property="prjCode" column="prj_code"/>
+        <result property="empId" column="emp_id"/>
+        <result property="comId" column="com_id"/>
+        <result property="type" column="type"/>
+        <association property="project" javaType="com.hansol.rnr.entity.Project">
+            <result property="prjName" column="prj_name"/>
+        </association>
+        <association property="employee" javaType="com.hansol.rnr.entity.Employee">
+            <result property="empName" column="emp_name"/>
+            <result property="empContact" column="emp_contact"/>
+            <result property="position" column="position"/>
+        </association>
+        <association property="company" javaType="com.hansol.rnr.entity.Company">
+            <result property="comName" column="com_name"/>
+        </association>
+    </resultMap>
+
+</mapper>

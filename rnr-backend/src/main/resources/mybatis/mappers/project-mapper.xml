@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hansol.rnr.mapper.ProjectMapper">
+    <insert id="insertProject" parameterType="com.hansol.rnr.entity.Project">
+        INSERT INTO project(prj_code, prj_name)
+        VALUES (#{prjCode}, #{prjName})
+    </insert>
+
+    <select id="selectProjectByCode"
+            parameterType="string"
+            resultType="com.hansol.rnr.entity.Project">
+        SELECT * FROM project WHERE prj_code = #{prjCode}
+    </select>
+
+    <select id="selectAllProject"
+            resultType="com.hansol.rnr.entity.Project">
+        SELECT * FROM project
+    </select>
+    
+    <select id="selectByCompany"
+            parameterType="string"
+            resultType="com.hansol.rnr.entity.Company">
+        SELECT * FROM company WHERE com_name = #{comName}
+    </select>
+
+    <select id="selectAllCompany"
+            resultType="com.hansol.rnr.entity.Company">
+        SELECT * FROM company
+    </select>
+
+    <update id="updateProject"
+            parameterType="com.hansol.rnr.entity.Project">
+        UPDATE project
+        SET prj_code = #{prjCode},
+            prj_name = #{prjName}
+        WHERE prj_code = #{prjCode}
+        LIMIT 1
+    </update>
+
+    <delete id="deleteProject"
+            parameterType="com.hansol.rnr.entity.Project">
+        DELETE
+        FROM project
+        WHERE prj_code = #{prjCode}
+        LIMIT 1
+    </delete>
+</mapper>

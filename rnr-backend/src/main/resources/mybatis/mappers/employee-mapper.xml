@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hansol.rnr.mapper.EmployeeMapper">
+    <insert id="insertEmployee" parameterType="com.hansol.rnr.entity.Employee">
+        INSERT INTO employee(emp_name, emp_contact, position)
+        VALUES (#{empName}, #{empContact}, #{position})
+    </insert>
+
+    <select id="selectEmployee"
+            parameterType="int"
+            resultType="com.hansol.rnr.entity.Employee">
+        SELECT * FROM employee WHERE emp_id = ${id}
+    </select>
+
+    <select id="selectByEmployeeName"
+            parameterType="string"
+            resultType="com.hansol.rnr.entity.Employee">
+        SELECT * FROM employee WHERE emp_name = #{empName}
+    </select>
+
+    <select id="selectAllEmployee"
+            resultType="com.hansol.rnr.entity.Employee">
+        SELECT * FROM employee
+    </select>
+
+    <update id="updateEmployee"
+            parameterType="com.hansol.rnr.entity.Employee">
+        UPDATE employee
+        SET emp_id = #{empId},
+            emp_name = #{empName},
+            emp_contact = #{empContact},
+            position = #{position}
+        WHERE emp_id = #{empId}
+        LIMIT 1
+    </update>
+
+    <delete id="deleteEmployee"
+            parameterType="com.hansol.rnr.entity.Employee">
+        DELETE FROM employee
+        WHERE emp_id = #{empId}
+        LIMIT 1
+    </delete>
+</mapper>
